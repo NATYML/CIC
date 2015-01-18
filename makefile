@@ -2,7 +2,7 @@
 CC = gcc
 CFLAGS = -I. -c
 LFLAGS = -lm
-MODULES = main.o density_map.o rw.o
+MODULES = main.o density_map_i.o rw.o
 
 PROGRAMS = main.out 
 
