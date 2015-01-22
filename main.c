@@ -23,7 +23,11 @@ int main(){
 	//The cells are created 		
 	Grid( cells,prm );    
 
+	//CIC code 
 	CIC( parts,cells,prm );
+
+	//Associated field stored per cell
+	Write_out_file( cells,prm );
 
 return 0;
 }

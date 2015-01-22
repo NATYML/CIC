@@ -56,7 +56,7 @@ int locate_cell(double xp, double yp, double zp, int *n, float *prm ){
 	the periodical conditions on z */
 	if ( (zp+prm[delta_x]) > prm[L] ){
 	k = prm[N]-1;
-	}
+	}	
 	else if ( (zp-prm[delta_x]) < 0 ){
 	k = 0;
 	}
@@ -70,18 +70,17 @@ int locate_cell(double xp, double yp, double zp, int *n, float *prm ){
 /*************************************************************/
 /*************************************************************/
 			//Cloud in Cell Method
-int CIC(struct Particle *parts, struct Cell *cells,float *prm){
+int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 	
 	int n[9],ll;
 	double frac[8];
-	double x_temp,y_temp,z_temp, frac_temp;
-	double xc_temp, yc_temp, zc_temp;
+	double x_temp,y_temp,z_temp, frac_temp; 
+	double xc_temp, yc_temp, zc_temp; 
 
-//	for (int i = 0; i < (int) prm[N_part]; i++){
-	//for (int i = 0; i < 4000; i++){
+	for (int i = 0; i < (int) prm[N_part]; i++){
 	//int i = 133844;
 	//int i = 173702;
-	int i = 231740;	
+	//int i = 231740;	
 				
 			/*Cell centered in the particle: cells[n0]
       				Cell of the particle*/ 
@@ -125,7 +124,7 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm){
 			for (int r = 0; r < 2; r++){
 				
 				//Cell centered in the particle
-				printf("Ciclo interno %d\n",ll);
+				//printf("Ciclo interno %d\n",ll);
 				//Position of the corner
 				x_temp = parts[i].xp + pow(-1,p)*prm[delta_x]/2.0;
 				y_temp = parts[i].yp + pow(-1,q)*prm[delta_x]/2.0;
@@ -146,16 +145,16 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm){
 								   ( y_temp - yc_temp )*
 								   ( z_temp - zc_temp ) ) / prm[v_celda];
 				
-				printf("%lf\n",frac[ll-1]);
+				//printf("%lf\n",frac[ll-1]);
 				/*printf("Pos. esqui\t%1.5e\t%1.5e\t%1.5e\n", x_temp,
 															y_temp,
 															z_temp );
 				printf("Pos. celdas %1.5e\t%1.5e\t%1.5e\n", cells[n[ll]].xc,
 															cells[n[ll]].yc,
-															cells[n[ll]].zc );*/
+															cells[n[ll]].zc );
 				printf("Resta %1.5e\t%1.5e\t%1.5e\n", ( x_temp - xc_temp ),
 				( y_temp - yc_temp ),
-				( z_temp - zc_temp ) );	
+				( z_temp - zc_temp ) );	*/
 				//Adding the fraction of mass in the neighbors cells
 				frac_temp = frac_temp + frac[ll-1];
 				//printf("%lf\n", frac_temp);
@@ -170,7 +169,7 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm){
 	cells[n[0]].mc = ( 1.0 - frac_temp )*parts[i].mp+ cells[n[0]].mc;
 	//if(frac_temp>1.0) {printf("HOLA Index, n part, frac_temp and m\t%d\t%d\t%lf\t\n",i,n[0],cells[n[0]].mc);}
 	//printf("%f\t%lf\n",frac_temp,cells[n[0]].mc);
-	//}
+	}
 
 return 0;
 }

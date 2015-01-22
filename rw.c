@@ -96,3 +96,45 @@ int Read(struct Particle *str_array, float *N_particles){
 
 	return 0;
 }
+
+/*************************************************************/
+
+				//Write file with the Field 
+int Write_out_file( struct Cell *CELLS,float *prm ){
+
+	int i = 0, N_celda,dumb = 0; 
+	FILE *fp;
+
+	//Create document to write out
+	fp = fopen("./out.dat","w"); 
+
+	fprintf( fp, "#First Raw: Divisions Grid N, Box length L(kpc), Size cells, Number Particles\n");
+	fprintf( fp, "#Second Raw: Position x, y, z($kpc$) and mass($10^{12}M_{sun}$)\n ");
+
+	//Some parameters are stored
+	fprintf( fp, "%lf\t%lf\t%lf\t%lf\n",
+				  prm[N],
+				  prm[L],
+				  prm[delta_x],
+		          prm[N_part]  );			
+
+
+	//Position and mass assigned is stored per cell 
+	for (int n = 0; n < prm[N]; n++){
+		for (int m = 0; m < prm[N]; m++){
+			for (int l= 0; l< prm[N]; l++){
+				N_celda = l+prm[N]*(m+prm[N]*n);
+				fprintf( fp, "%lf\t%lf\t%lf\t%lf\n",
+							  CELLS[N_celda].xc,
+							  CELLS[N_celda].yc,
+							  CELLS[N_celda].zc,
+		        			  CELLS[N_celda].mc	 );			
+		    }
+		}
+	}	
+
+
+	fclose(fp);
+
+	return 0;
+}
