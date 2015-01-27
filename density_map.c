@@ -16,6 +16,7 @@ for (int n = 0; n < prm[N]; n++){
 			}
 		}
 	}
+
 return 0;
 }
 
@@ -32,10 +33,10 @@ int locate_cell(double xp, double yp, double zp, int *n, float *prm ){
 
 	/* Counter on x taking into account
 	the periodical conditions on x */
-	if ( (xp+prm[delta_x]) > prm[L] ){
+	if ( xp > prm[L] ){
 	i = prm[N]-1;
 	}
-	else if ( (xp-prm[delta_x]) < 0 ){
+	else if ( xp < 0 ){
 	i = 0;
 	}
 	else{
@@ -43,10 +44,10 @@ int locate_cell(double xp, double yp, double zp, int *n, float *prm ){
 	}
 	/* Counter on y taking into account
 	the periodical conditions on y */
-	if ( (yp+prm[delta_x]) > prm[L] ){
+	if ( yp > prm[L] ){
 	j = prm[N]-1;
 	}
-	else if ( (yp-prm[delta_x]) < 0 ){
+	else if ( yp < 0 ){
 	j = 0;
 	}
 	else{
@@ -54,10 +55,10 @@ int locate_cell(double xp, double yp, double zp, int *n, float *prm ){
 	}
 	/* Counter on z taking into account
 	the periodical conditions on z */
-	if ( (zp+prm[delta_x]) > prm[L] ){
+	if ( zp > prm[L] ){
 	k = prm[N]-1;
 	}	
-	else if ( (zp-prm[delta_x]) < 0 ){
+	else if ( zp < 0 ){
 	k = 0;
 	}
 	else{
@@ -103,26 +104,13 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 		}
 	else { zc_temp = cells[n[0]].zc; }
 
-				/*---------Boundary conditions---------*/
-	if( parts[i].xp + prm[delta_x]/2.0 > prm[L] ){ xc_temp = xc_temp -(prm[N]-2)*delta_x; }
-	if( parts[i].yp + prm[delta_x]/2.0 > prm[L] ){ yc_temp = yc_temp -(prm[N]-2)*delta_x; }
-	if( parts[i].zp + prm[delta_x]/2.0 > prm[L] ){ zc_temp = zc_temp -(prm[N]-2)*delta_x; }
-
-	if( parts[i].xp - prm[delta_x]/2.0 < 0 ){ xc_temp = xc_temp + prm[N]*delta_x; }
-	if( parts[i].yp - prm[delta_x]/2.0 < 0 ){ yc_temp = yc_temp + prm[N]*delta_x; }
-	if( parts[i].zp - prm[delta_x]/2.0 < 0 ){ zc_temp = zc_temp + prm[N]*delta_x; }
-	/*
-	printf("Delta x %lf\n", prm[delta_x]);
-	printf("Pos de esquina de cel_p\t%1.5e\t%1.5e\t%1.5e\n", xc_temp,
-								  							 yc_temp,
-															 zc_temp );
-	*/
 	ll = 1;
 	frac_temp = 0;
 	for (int p = 0; p < 2; p++){
 		for (int q = 0; q < 2; q++){
 			for (int r = 0; r < 2; r++){
 				
+									
 				//Cell centered in the particle
 				//printf("Ciclo interno %d\n",ll);
 				//Position of the corner
@@ -138,6 +126,15 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 							 prm );
 				//printf("n celda %d\n", n[ll]);
 				if (n[ll]==n[0]){ ll++; continue; }
+
+					/*---------Boundary conditions---------*/
+				if( x_temp > prm[L] ){ x_temp = x_temp - prm[N]*delta_x; }
+				if( y_temp > prm[L] ){ y_temp = y_temp - prm[N]*delta_x; }
+				if( z_temp > prm[L] ){ z_temp = z_temp - prm[N]*delta_x; }
+
+				if( x_temp < 0 ){ x_temp = fabs(x_temp); }
+				if( y_temp < 0 ){ y_temp = fabs(y_temp); }
+				if( z_temp < 0 ){ z_temp = fabs(z_temp); }
 
 				/*Fraction of volume of the cell centered in the particle
 				that is on the cell n[ll] divided by the volume of a cell*/	
@@ -167,7 +164,7 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 	}
 	//Contribution to mass to the cell where particle is located
 	cells[n[0]].mc = ( 1.0 - frac_temp )*parts[i].mp+ cells[n[0]].mc;
-	//if(frac_temp>1.0) {printf("HOLA Index, n part, frac_temp and m\t%d\t%d\t%lf\t\n",i,n[0],cells[n[0]].mc);}
+	if(frac_temp>1.0) {printf("HOLA Index, n part, frac_temp and m\t%d\t%d\t%lf\t\n",i,n[0],frac_temp);}
 	//printf("%f\t%lf\n",frac_temp,cells[n[0]].mc);
 	}
 
