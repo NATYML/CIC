@@ -64,12 +64,11 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 	double frac[8];
 	double x_temp,y_temp,z_temp, frac_temp; 
 	double xc_temp, yc_temp, zc_temp; 
-	//printf("%lf\n",prm[delta_x] );
+
 	for (int i = 0; i < (int) prm[N_part]; i++){
 				
 			/*Cell centered in the particle: cells[n0]
       				Cell of the particle*/ 
-	//printf("%d\n",i );
 
 	locate_cell( parts[i].xp, 
 				 parts[i].yp, 
@@ -95,13 +94,6 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 		zc_temp = cells[n[0]].zc + prm[delta_x];
 		}
 	else { zc_temp = cells[n[0]].zc; }
-	/*
-	if(i==239415){printf("Celda\t%1.5e\t%1.5e\t%1.5e\n", cells[n[0]].xc,
-															cells[n[0]].yc,
-															cells[n[0]].zc);}
-	if(i==239415){printf("Particula \t%1.5e\t%1.5e\t%1.5e\n", parts[i].xp,
-														     parts[i].yp,
-															 parts[i].zp);}*/
 																
 	ll = 1;
 	frac_temp = 0;
@@ -110,17 +102,14 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 			for (int r = 0; r < 2; r++){
 						
 				//Cell centered in the particle
-				//printf("Ciclo interno %d\n",ll);
+				
 				//Position of the corner
 				x_temp = parts[i].xp + pow(-1,p)*prm[delta_x]/2.0;
 				y_temp = parts[i].yp + pow(-1,q)*prm[delta_x]/2.0;
 				z_temp = parts[i].zp + pow(-1,r)*prm[delta_x]/2.0;
 				
-				/*
-				printf("Pos. esqui\t%1.5e\t%1.5e\t%1.5e\n", x_temp,
-															y_temp,
-															z_temp );
-				*/
+				//Points that are outside the box are not taking 
+				//into account. Mass is zero outside the box.
 				if (x_temp > prm[L] || x_temp < 0){ ll++; continue; }
 				if (y_temp > prm[L] || y_temp < 0){ ll++; continue; }
 				if (z_temp > prm[L] || z_temp < 0){ ll++; continue; }
@@ -134,7 +123,6 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 							 prm,
 							 cells );
 
-				//printf("n celda %d\n", n[ll]);
 				if (n[ll]==n[0]){ ll++; continue; }
 		
 				/*Fraction of volume of the cell centered in the particle
@@ -142,34 +130,12 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 				frac[ll-1] = fabs( ( x_temp - xc_temp )*
 								   ( y_temp - yc_temp )*
 								   ( z_temp - zc_temp ) ) / prm[v_celda];
-				/*if(i==239415){printf("%lf\n",frac[ll-1]);
-							 printf("Pos. Cent. part. \t%1.5e\t%1.5e\t%1.5e\n", x_temp,
-																				y_temp,
-																				z_temp );
-							 printf("Esqui esc \t%1.5e\t%1.5e\t%1.5e\n", xc_temp,
-															yc_temp,
-															zc_temp );								
-																}*/
-				//printf("%lf\n",frac[ll-1]);
-				/*printf("Pos. esqui\t%1.5e\t%1.5e\t%1.5e\n", x_temp,
-															y_temp,
-															z_temp );
-				printf("Pos. celdas %1.5e\t%1.5e\t%1.5e\n", cells[n[ll]].xc,
-															cells[n[ll]].yc,
-															cells[n[ll]].zc );
-
-				printf("Resta %1.5e\t%1.5e\t%1.5e\n", ( x_temp - xc_temp ),
-																	( y_temp - yc_temp ),
-																	( z_temp - zc_temp ) );											*/
 
 				//Adding the fraction  of mass in the neighbors cells
 				frac_temp = frac_temp + frac[ll-1];
-				//printf("%lf\n", frac_temp);
 				//Contribution to mass due to the particle to the cell n[ll]
 				cells[n[ll]].mc = frac[ll-1]*parts[i].mp + cells[n[ll]].mc;
-					/*{printf("Pos.\t%1.5e\t%1.5e\t%1.5e\n", x_temp,
-															y_temp,
-															z_temp );}*/
+					
 				//Counter of corners
 				ll++;
 				}
@@ -177,8 +143,6 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 	}
 	//Contribution to mass to the cell where particle is located
 	cells[n[0]].mc = ( 1.0 - frac_temp )*parts[i].mp+ cells[n[0]].mc;
-	if(frac_temp>1.0) {printf("Fra >1 Index part i, n, frac_temp \t%d\t%d\t%lf\t\n",i,n[0],frac_temp);}
-	//printf("%f\t%lf\n",frac_temp,cells[n[0]].mc);
 	}
 
 return 0;
