@@ -16,9 +16,9 @@ int main(){
 	//Reading particle positions 
 	Read(parts, &prm[N_part]);
 	
-	//Array of Structures Cells, size NMAX 
+	//Array of Structures Cells, size N^3
 	struct Cell *cells; 
-	cells = (struct Cell *)calloc( pow(prm[N],3), sizeof( struct Cell) );	
+	cells = (struct Cell *)calloc( pow(prm[N],3), sizeof( struct Cell) );
 	
 	//The cells are created 		
 	Grid( cells,prm );    
