@@ -32,9 +32,9 @@ int locate_cell(double xp, double yp, double zp, int idpart,
 	//Numbers in order to find the cell
 	//Counters in x,y y z
 	int i,j,k;
-	float delta = 1e-2;
+	float delta = 1e-4;
 
-	if(prm[L]-xp <= delta){i = prm[N]-1;}
+	if( prm[L]-xp <= delta){i = prm[N]-1;}
 	else{i = floor( xp / prm[L] * prm[N] );}
 	if(prm[L]-yp <= delta){j = prm[N]-1;}
 	else{j = floor( yp / prm[L] * prm[N] );}
@@ -108,12 +108,12 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 				y_temp = parts[i].yp + pow(-1,q)*prm[delta_x]/2.0;
 				z_temp = parts[i].zp + pow(-1,r)*prm[delta_x]/2.0;
 				
-				//Points that are outside the box are not taking 
+				//Points that are outside the box are not taking
 				//into account. Mass is zero outside the box.
 				if (x_temp > prm[L] || x_temp < 0){ ll++; continue; }
 				if (y_temp > prm[L] || y_temp < 0){ ll++; continue; }
 				if (z_temp > prm[L] || z_temp < 0){ ll++; continue; }
-
+				
 				//Cell in which corner pqr is located
 				locate_cell( x_temp,
 							 y_temp,
@@ -124,7 +124,7 @@ int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 							 cells );
 
 				if (n[ll]==n[0]){ ll++; continue; }
-		
+
 				/*Fraction of volume of the cell centered in the particle
 				that is on the cell n[ll] divided by the volume of a cell*/	
 				frac[ll-1] = fabs( ( x_temp - xc_temp )*
