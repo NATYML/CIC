@@ -29,6 +29,9 @@ int main(){
 	//Associated field stored per cell
 	Write_out_file( cells,prm );
 
+	//Density Contrast 
+	density_contrast( cells,prm );
+
 return 0;
 }
 

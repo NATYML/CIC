@@ -1,6 +1,7 @@
 #include "allvars.h"
 
 /*************************************************************/
+/*************************************************************/
 //Grid to construct Cells
 
 int Grid(struct Cell *struct_array, float *prm){
@@ -16,7 +17,7 @@ for (int n = 0; n < prm[N]; n++){
 			struct_array[N_celda].zc = l*prm[delta_x];
 			}
 		}
-	}
+	} 
 
 return 0;
 }
@@ -77,7 +78,9 @@ int locate_cell(double xp, double yp, double zp, int idpart,
 
 /*************************************************************/
 /*************************************************************/
+			
 			//Cloud in Cell Method
+
 int CIC(struct Particle *parts, struct Cell *cells,float *prm ){
 	
 	int n[9],ll;
@@ -171,4 +174,29 @@ printf("Particles total mass %lf \t Cells total mass %lf\n", mp_temp,mp_temp_cel
 
 return 0;
 }
+
+/*************************************************************/
+/*************************************************************/
+			
+			//Density Contrast 
+
+int density_contrast( struct Cell *cells,float *prm )
+	{
+	int i;
+	double bck_den = 0;	
+
+	//Background density 
+	for(i= 0; i<pow(N,3);i++){		
+  		bck_den = cells[i].mc + bck_den; 
+  	    }  
+    bck_den = bck_den/i;
+
+    //Density contrast 
+    for(i= 0; i<pow(N,3);i++){	
+        cells[i].den_con =  cells[i].mc - bck_den;  
+       }
+
+	return 0;	
+	}
+
 /*************************************************************/
