@@ -108,8 +108,9 @@ int Write_out_file( struct Cell *CELLS,float *prm ){
 	//Create document to write out
 	fp = fopen("./out.dat","w"); 
 
-	fprintf( fp, "#First Raw: Divisions Grid N, Box length L(kpc), Size cells, Number Particles\n");
-	fprintf( fp, "#Second Raw: Position x, y, z($kpc$) and mass($10^{12}M_{sun}$)\n ");
+	fprintf( fp, "# 5 first raws: Divisions Grid N, Box length L(kpc), Size cells, 
+			     Number Particles, density_contrast\n");
+	fprintf( fp, "# mass($10^{12}M_{sun}$) \n ");
 
 	//Some parameters are stored
 	fprintf( fp, "%lf\n%lf\n%lf\n%lf\n", prm[N],
@@ -122,7 +123,7 @@ int Write_out_file( struct Cell *CELLS,float *prm ){
 		for (int m = 0; m < prm[N]; m++){
 			for (int l= 0; l< prm[N]; l++){
 				 N_celda = l+prm[N]*(m+prm[N]*n);
-				 fprintf( fp, "%lf\n",CELLS[N_celda].mc	);
+				 fprintf( fp, "%lf \n",CELLS[N_celda].mc	);
 			}
 		}
 	} 
