@@ -108,9 +108,9 @@ int Write_out_file( struct Cell *CELLS,float *prm ){
 	//Create document to write out
 	fp = fopen("./out.dat","w"); 
 
-	fprintf( fp, "# 5 first raws: Divisions Grid N, Box length L(kpc), Size cells, 
+	fprintf( fp, " 5 first raws: Divisions Grid N, Box length L(kpc), Size cells,\
 			     Number Particles, density_contrast\n");
-	fprintf( fp, "# mass($10^{12}M_{sun}$) \n ");
+	fprintf( fp, " mass($10^{12}M_{sun}$) \n ");
 
 	//Some parameters are stored
 	fprintf( fp, "%lf\n%lf\n%lf\n%lf\n", prm[N],
