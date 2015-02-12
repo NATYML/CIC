@@ -8,4 +8,4 @@ L = 20000
 #.....................................
 # Number of divisions in one dimension
 # N^3 cells 
-N = 20
+N = 36

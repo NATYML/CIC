@@ -14,9 +14,12 @@
 struct Particle{
   double xp,yp,zp,mp;
   };
+  
 struct Cell{
-  double xc,yc,zc,mc;  
-  };
+	double xc,yc,zc,mc;
+	int Np_cell;
+	long int* id_part;
+};
 
 /********************Libraries Used********************/
 #include<stdlib.h>
